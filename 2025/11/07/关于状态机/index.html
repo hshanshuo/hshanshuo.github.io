@@ -13,7 +13,7 @@
 
 
 
-<title>Hexo</title>
+<title>关于状态机——用事件触发状态 | Hexo</title>
 
 
 
@@ -196,7 +196,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title"></h1>
+            <h1 class="post-title">关于状态机——用事件触发状态</h1>
             
                 <div class="post-meta">
                     
@@ -205,16 +205,82 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">十一月 7, 2025&nbsp;&nbsp;8:47:40</a>
+                        Date: <a href="#">十一月 7, 2025&nbsp;&nbsp;9:27:37</a>
                         </span>
                     
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E7%A8%8B%E5%BA%8F/">程序</a>
+                            
+                        </span>
                     
                 </div>
             
         </header>
 
         <div class="post-content">
-            <h1 id="关于状态机"><a href="#关于状态机" class="headerlink" title="关于状态机"></a>关于状态机</h1>
+            <h1 id="关于状态机——用事件触发状态"><a href="#关于状态机——用事件触发状态" class="headerlink" title="关于状态机——用事件触发状态"></a>关于状态机——用事件触发状态</h1><h2 id="一、为什么要学习状态机？"><a href="#一、为什么要学习状态机？" class="headerlink" title="一、为什么要学习状态机？"></a>一、为什么要学习状态机？</h2><p>​	在最近的学习与实践过程中，笔者频繁地遇到需要设置并变更对象状态的情形，这一过程促使我去探索更为系统化的解决方案——状态机。为了更好地引入这个概念，让我们从日常生活中最常见的例子说起：红绿灯。就像红绿灯明确指示着车辆何时停止、何时行进一样，状态机也为我们提供了一套清晰且有序的框架，用以管理和转换软件系统中复杂的状态逻辑。通过学习和应用状态机，我们不仅能够有效避免代码中的混乱与冗余，还能大幅提升系统的可维护性和扩展性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TrafficLight</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">String</span> <span class="variable">state</span> <span class="operator">=</span> <span class="string">&quot;RED&quot;</span>; <span class="comment">// 当前状态：RED, YELLOW, GREEN</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">change</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (state.equals(<span class="string">&quot;RED&quot;</span>)) &#123;</span><br><span class="line">            state = <span class="string">&quot;GREEN&quot;</span>;</span><br><span class="line">            System.out.println(<span class="string">&quot;红灯 → 绿灯&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (state.equals(<span class="string">&quot;GREEN&quot;</span>)) &#123;</span><br><span class="line">            state = <span class="string">&quot;YELLOW&quot;</span>;</span><br><span class="line">            System.out.println(<span class="string">&quot;绿灯 → 黄灯&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (state.equals(<span class="string">&quot;YELLOW&quot;</span>)) &#123;</span><br><span class="line">            state = <span class="string">&quot;RED&quot;</span>;</span><br><span class="line">            System.out.println(<span class="string">&quot;黄灯 → 红灯&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;未知状态: &quot;</span> + state);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	通过上面的示例代码可以看出，这段代码存在十分明显的问题：1、状态与行为耦合严重，将所有的逻辑都塞在change()中；2、违反了开闭原则，如果要新增状态必须要在原有代码上修改；3、难以复用，无法为不同状态定义专属行为（比如黄灯时不能启动车辆）。</p>
+<h2 id="二、什么是状态机"><a href="#二、什么是状态机" class="headerlink" title="二、什么是状态机"></a>二、什么是状态机</h2><p>​	在计算机科学中，状态机（Finite State Machine, FSM）通常是指有限状态机，它包含有限数量的状态，每一种状态代表系统的一种状况。状态机可以是确定性的（Deterministic Finite State Machine, DFSA），也可以是非确定性的（Nondeterministic Finite State Machine, NFSA）。在确定性状态机中，对于任何给定的输入，都有唯一一个后继状态；而在非确定性状态机中，则可能有多个或没有后继状态。</p>
+<p>看学术性解释很复杂对吧，我继续拿上述的红绿灯来举例。红绿灯有三种状态：</p>
+<ul>
+<li><strong>红灯（Red）</strong></li>
+<li><strong>黄灯（Yellow）</strong></li>
+<li><strong>绿灯（Green）</strong></li>
+</ul>
+<p>对应的它的行为规则为下列的三种：</p>
+<ul>
+<li><strong>红灯 → 绿灯（亮起通行）</strong></li>
+<li><strong>绿灯 → 黄灯（准备停止）</strong></li>
+<li><strong>黄灯 → 红灯（禁止通行</strong></li>
+</ul>
+<p>​	并且<strong>不能跳过状态</strong>，在生活你不会看见红灯直接变成黄灯，也不会看见绿灯直接变成红灯（除非故障对吧），这种“状态+触发条件—&gt;新状态”的规则，就是状态机的核心。</p>
+<p>顺便在这里介绍一下，状态机的<strong>四个基本要素</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>说明</th>
+<th>红绿灯示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>状态（State）</strong></td>
+<td>系统当前所处的情形</td>
+<td><code>RED</code>, <code>YELLOW</code>, <code>GREEN</code></td>
+</tr>
+<tr>
+<td><strong>事件（Event）</strong></td>
+<td>触发状态转换的信号</td>
+<td>“定时器到时”、“手动切换”</td>
+</tr>
+<tr>
+<td><strong>转换（Transition）</strong></td>
+<td>从一个状态到另一个状态的规则</td>
+<td>RED + timeout → GREEN</td>
+</tr>
+<tr>
+<td><strong>动作（Action）</strong>（可选）</td>
+<td>状态切换时执行的操作</td>
+<td>“红灯亮起时关闭通行信号”</td>
+</tr>
+</tbody></table>
+<p>​	目前常见的状态机可以分为<strong>Moore</strong>型和<strong>Mealy</strong>型，差别在于前者的输出单纯由寄存的<strong>状态</strong>决定，后者的输出由<strong>输入</strong>和<strong>状态</strong>输出同时决定。</p>
+<p><strong>Moore 型</strong>：输出只依赖当前状态（如红灯亮 &#x3D; 输出“停”）</p>
+<p><strong>Mealy 型</strong>：输出依赖“当前状态 + 输入事件”（较少用于业务系统）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">​```mermaid</span><br><span class="line">stateDiagram-v2</span><br><span class="line">    [*] --&gt; RED</span><br><span class="line">    RED --&gt; GREEN : timeout</span><br><span class="line">    GREEN --&gt; YELLOW : timeout</span><br><span class="line">    YELLOW --&gt; RED : timeout</span><br><span class="line">​```</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
         </div>
 
         
@@ -241,6 +307,14 @@
                 <span>Tag(s):</span>
                 <span class="tag">
                     
+                    
+                        <a href="/tags/%E7%A7%91%E6%8A%80/"># 科技</a>
+                    
+                        <a href="/tags/Java/"># Java</a>
+                    
+                        <a href="/tags/%E7%8A%B6%E6%80%81%E6%9C%BA/"># 状态机</a>
+                    
+                        
                 </span>
             </div>
             <div>

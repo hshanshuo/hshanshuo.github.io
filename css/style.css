@@ -607,7 +607,7 @@ header label {
   font-weight: normal;
 }
 .links a {
-  padding: 0 5px;
+  padding: 0 10px;
 }
 .links a:hover {
   background-color: transparent;
@@ -678,11 +678,11 @@ header label {
 .post-wrap .categories-card .card-item .categories {
   overflow: hidden;
 }
-.tag-cloud-tags {
+.tag-tags {
   margin: 10px 0;
   padding-top: 2em;
 }
-.tag-cloud-tags a {
+.tag-tags a {
   display: inline-block;
   position: relative;
   margin: 5px 10px;
@@ -691,22 +691,22 @@ header label {
   transition-property: transform;
   transition-timing-function: ease-out;
 }
-.tag-cloud-tags a:active,
-.tag-cloud-tags a:focus,
-.tag-cloud-tags a:hover {
+.tag-tags a:active,
+.tag-tags a:focus,
+.tag-tags a:hover {
   color: #2d96bd;
   transform: scale(1.1);
 }
-.dark-theme .tag-cloud-tags a:active,
-.dark-theme .tag-cloud-tags a:focus,
-.dark-theme .tag-cloud-tags a:hover {
+.dark-theme .tag-tags a:active,
+.dark-theme .tag-tags a:focus,
+.dark-theme .tag-tags a:hover {
   color: #fff;
 }
-.tag-cloud-tags a small {
+.tag-tags a small {
   margin: 0 0.3em;
   color: #a9a9b3;
 }
-.dark-theme .tag-cloud-tags a small {
+.dark-theme .tag-tags a small {
   color: #fff;
 }
 .page {
